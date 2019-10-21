@@ -9,16 +9,14 @@ final class RequestBoolean
 
     public function __construct($value)
     {
-        $this->ensureIsValidBool($value);
+        $value = $this->sanitizeBoolean($value);
 
         $this->value = $value;
     }
 
-    private function ensureIsValidBool($value): void
+    private function sanitizeBoolean($value)
     {
-        if (false === filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
-            throw new \InvalidArgumentException(sprintf('The value <%s> is not a valid boolean', $value));
-        }
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function value(): bool
