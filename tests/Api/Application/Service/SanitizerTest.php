@@ -101,6 +101,42 @@ class SanitizerTest extends TestCase
     }
 
     /** @test */
+    public function test_should_sanitize_an_array_of_strings_type_param(): void
+    {
+        $data = [
+            'param_1' => [
+                'name' => 'param_1',
+                'type' => 'array of strings',
+                'value' => array('<p>lorem</p>', '<h2>ipsum</h2>', '!dolor¡')
+            ]
+        ];
+
+        $sanitizer = new Sanitizer();
+        $sanitizedData = $sanitizer($data);
+
+        $this->assertEquals(3, count($sanitizedData['param_1']));
+        $this->assertEquals('ipsum', ($sanitizedData['param_1'][1]));
+    }
+
+    /** @test */
+    public function test_should_sanitize_an_array_of_integers_type_param_with_html(): void
+    {
+        $data = [
+            'param_1' => [
+                'name' => 'param_1',
+                'type' => 'array of integers',
+                'value' => array('5a23p', '57', '564Y')
+            ]
+        ];
+
+        $sanitizer = new Sanitizer();
+        $sanitizedData = $sanitizer($data);
+
+        $this->assertEquals(3, count($sanitizedData['param_1']));
+        $this->assertEquals('523', ($sanitizedData['param_1'][0]));
+    }
+
+    /** @test */
     public function test_should_sanitize_an_url_type_param(): void
     {
         $data = [
@@ -132,6 +168,42 @@ class SanitizerTest extends TestCase
         $sanitizedData = $sanitizer($data);
 
         $this->assertEquals('john.doe@example.com', $sanitizedData['param_1']);
+    }
+
+    /** @test */
+    public function test_should_sanitize_a_date_type_param(): void
+    {
+        $data = [
+            'param_1' => [
+                'name' => 'param_1',
+                'type' => 'date',
+                'value' => '2019-10-21'
+            ]
+        ];
+
+        $sanitizer = new Sanitizer();
+        $sanitizedData = $sanitizer($data);
+
+        $this->assertEquals('2019-10-21', $sanitizedData['param_1']);
+    }
+
+    /** @test */
+    public function test_should_fails_sanitizing_an_invalid_date_type_param(): void
+    {
+        $data = [
+            'param_1' => [
+                'name' => 'param_1',
+                'type' => 'date',
+                'value' => '10-2019-21'
+            ]
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $sanitizer = new Sanitizer();
+        $sanitizedData = $sanitizer($data);
+
+        $this->assertEquals('2019-10-21', $sanitizedData['param_1']);
     }
 
     /** @test */

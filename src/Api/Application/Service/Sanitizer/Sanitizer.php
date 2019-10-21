@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace App\Api\Application\Service\Sanitizer;
 
+use App\Api\Domain\Request\RequestArrayOfIntegers;
+use App\Api\Domain\Request\RequestArrayOfStrings;
 use App\Api\Domain\Request\RequestBoolean;
+use App\Api\Domain\Request\RequestDate;
 use App\Api\Domain\Request\RequestEmail;
 use App\Api\Domain\Request\RequestFloat;
 use App\Api\Domain\Request\RequestInt;
@@ -56,11 +59,20 @@ class Sanitizer
             case self::TYPE_BOOLEAN:
                 $item = new RequestBoolean($value);
                 break;
+            case self::TYPE_ARRAY_OF_STRINGS:
+                $item = new RequestArrayOfStrings($value);
+                break;
+            case self::TYPE_ARRAY_OF_INTEGERS:
+                $item = new RequestArrayOfIntegers($value);
+                break;
             case self::TYPE_EMAIL:
                 $item = new RequestEmail($value);
                 break;
             case self::TYPE_URL:
                 $item = new RequestUrl($value);
+                break;
+            case self::TYPE_DATE:
+                $item = new RequestDate($value);
                 break;
         }
 
