@@ -1,6 +1,6 @@
 {
     "name": "daniel/part-two",
-    "description": "A simple sanitize aplplication service",
+    "description": "A simple sanitizer application service",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Filesystem\\": "src/Sanitizer"
+            "Api\\": ["src"]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Filesystem\\": "tests/Sanitizer"
+            "Api\\Tests\\": ["tests"]
         }
     }
 }
